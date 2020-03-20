@@ -1,16 +1,25 @@
 import logging
-import click
+from .uploader import Uploader
+from .reader import Reader
+from .deserializers import ProtoDes
+from .serializers import ProtoSer
 
 logger = logging.getLogger(__name__)
 
 
-@click.command()
-@click.option('-h', '--host', type=str, help='Upload sample to this host',
-              default='127.0.0.1')
-@click.option('-p', '--port', type=int, help='Upload sample to this port',
-              default=8000)
-@click.argument('path', type=str)
+# TODO - add integration test
 def upload_sample(host, port, path):
-    print(f'upload_sample, host={host}, port={port}, path={path}')
+    try:
+        reader = Reader(path, ProtoDes())
+        uploader = Uploader(host, port, ProtoSer())
 
-
+        uploader.upload(reader.user)
+        for snapshot in reader:
+            uploader.upload(snapshot)
+    except FileNotFoundError:  # TODO - not sure if this is enough,
+        # maybe log the error
+        print(f'Could not find {path}, upload failed')
+    except ConnectionError:
+        print(f'failed to connect with {host}:{port}')
+    except Exception:
+        print(f'Failed to read {path} and upload to {host}:{port}')
