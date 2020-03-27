@@ -1,8 +1,7 @@
 import pathlib
 import struct
 import gzip
-
-from ..utils import cortex_pb2 as mind
+from cortex.serdes.deserializers import Deserializer
 
 
 class Reader:
@@ -10,16 +9,15 @@ class Reader:
     Reads a gzipped mind file message by message
     assumes each message is prefixed by it's size
     """
-    def __init__(self, mind_path, deserializer):
+    def __init__(self, mind_path, content_type):
         """
         :param mind_path: the path to the mind file, gzipped or not which is
                           built as sequence of messages, size and message
         :param deserializer:    turns each message into a type
         """
         self.rp = self._open_mind_file(mind_path)
-        self.deserializer = deserializer
-        self.user = mind.User()
-        self._parse_from_file(self.user)
+        self.deserializer = Deserializer(content_type)
+        self.user = self._parse_user()
 
     def __repr__(self):
         return f'Reader of mind file: {self.rp.name} , ' \
@@ -30,8 +28,7 @@ class Reader:
             if self._is_end():
                 self.rp.close()
                 return
-            snapshot = mind.Snapshot()
-            self._parse_from_file(snapshot)
+            snapshot = self._parse_snapshot()
             yield snapshot
 
     def _is_end(self):
@@ -43,10 +40,17 @@ class Reader:
         message_len, = struct.unpack('I', self.rp.read(4))
         return self.rp.read(message_len)
 
-    def _parse_from_file(self, entity):
+    def _parse_user(self):
+        message_bytes = self._get_message_bytes()
+        return self.deserializer.deserialize_user(message_bytes)
+
+    def _parse_snapshot(self):
+        message_bytes = self._get_message_bytes()
+        return self.deserializer.deserialize_snapshot(message_bytes)
+
+    def _get_message_bytes(self):
         message_len, = struct.unpack('I', self.rp.read(4))
-        message_bytes = self.rp.read(message_len)
-        self.deserializer.deserialize(message_bytes, entity)
+        return self.rp.read(message_len)
 
     @staticmethod
     def _open_mind_file(mind_path):

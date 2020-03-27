@@ -1,6 +1,8 @@
 import sys
 import logging
 import click
+
+from cortex.server.publishers import Publisher
 from .server import run_server
 
 logger = logging.getLogger(__name__)
@@ -11,9 +13,10 @@ logger = logging.getLogger(__name__)
               default='127.0.0.1')
 @click.option('-p', '--port', type=int, help='Run server on this port',
               default=8000)
-@click.argument('publish', type=str)
-def main(host, port, publish):
-    run_server(host, port, publish)
+@click.argument('url', type=str)
+def main(host, port, url):
+    with Publisher(url) as publisher:
+        run_server(host, port, publisher.publish)
 
 
 if __name__ == '__main__':

@@ -4,10 +4,8 @@ import time
 
 import pytest
 from flask import Flask
-
-from cortex.utils import cortex_pb2 as mind
-from cortex.client.deserializers import ProtoDes
 from cortex.client.reader import Reader
+from tests.conftest import USER_ID
 
 app = Flask(__name__)
 
@@ -16,8 +14,9 @@ app = Flask(__name__)
 def web_server(host, port):
 
     def run_web():
-        @app.route('/', methods=['POST'])
-        def post():
+        @app.route('/user/<user_id>', methods=['POST'])
+        def post(user_id):
+            assert user_id == str(USER_ID)
             return '200'
         app.run(host, port)
 
@@ -41,25 +40,7 @@ def reader(mind_file, user, snapshot):
     with mind_file.open('wb') as rp:
         serialize_to_file(rp, user)
         serialize_to_file(rp, snapshot)
-    yield Reader(str(mind_file), ProtoDes())
-
-
-@pytest.fixture
-def snapshot():
-    translation = mind.Pose.Translation(x=1, y=1, z=1)
-    rotation = mind.Pose.Rotation(x=2, y=2, z=2, w=2)
-    pose = mind.Pose(translation=translation, rotation=rotation)
-    color_image = mind.ColorImage(width=20, height=30, data=b'color_data')
-    depth_image = mind.DepthImage(width=20, height=30)
-    feelings = mind.Feelings(hunger=1, thirst=1, exhaustion=1, happiness=1)
-    return mind.Snapshot(datetime=20200703, pose=pose,
-                         color_image=color_image, depth_image=depth_image,
-                         feelings=feelings)
-
-
-@pytest.fixture
-def user():
-    return mind.User(user_id=25, username='michaldeutch', birthday=699746400)
+    yield Reader(str(mind_file), 'proto')
 
 
 def serialize_to_file(rp, entity):
