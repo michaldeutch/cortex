@@ -1,6 +1,4 @@
-import multiprocessing
 import time
-from concurrent.futures.thread import ThreadPoolExecutor
 from threading import Thread
 
 import pytest

@@ -54,6 +54,6 @@ class Reader:
 
     @staticmethod
     def _open_mind_file(mind_path):
-        if mind_path.endswith('.zip'):
+        if mind_path.endswith('.zip') or mind_path.endswith('.gz'):
             return gzip.GzipFile(mind_path, mode='rb')
         return pathlib.Path(mind_path).open('rb')
