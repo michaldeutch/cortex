@@ -14,15 +14,15 @@ def run_server(host, port, publish):
     with PublishManager(publish) as publisher_manager:
         @app.route('/user/<user_id>', methods=['POST'])
         def handle_user(user_id):
-            executor.submit(target=publisher_manager.publish_user,
-                            args=(user_id, request.data,
-                                  request.content_type))
+            executor.submit(publisher_manager.publish_user, user_id,
+                            request.data, request.content_type)
+            return 'OK'
 
         @app.route('/snapshot/<user_id>', methods=['POST'])
         def handle_snapshot(user_id):
-            executor.submit(target=publisher_manager.publish_snapshot,
-                            args=(user_id, request.data,
-                                  request.content_type))
+            executor.submit(publisher_manager.publish_snapshot, user_id,
+                            request.data, request.content_type)
+            return 'OK'
 
         app.run(host, port)
         executor.shutdown()

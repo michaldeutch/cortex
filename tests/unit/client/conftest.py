@@ -30,30 +30,6 @@ def web_server(host, port):
         process.join()
 
 
-@pytest.fixture(scope='session')
-def mind_file(tmp_path_factory):
-    return tmp_path_factory.mktemp('mind_files').joinpath('test.mind')
-
-
 @pytest.fixture
-def reader(mind_file, user, snapshot):
-    with mind_file.open('wb') as rp:
-        serialize_to_file(rp, user)
-        serialize_to_file(rp, snapshot)
+def reader(mind_file):
     yield Reader(str(mind_file), 'proto')
-
-
-def serialize_to_file(rp, entity):
-    serialized_entity = entity.SerializeToString()
-    rp.write(struct.pack('I', len(serialized_entity)))
-    rp.write(serialized_entity)
-
-
-@pytest.fixture
-def host():
-    return 'localhost'
-
-
-@pytest.fixture
-def port():
-    return 7000

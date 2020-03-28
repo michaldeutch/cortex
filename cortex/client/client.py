@@ -19,5 +19,5 @@ def upload_sample(host, port, path):
         print(f'Could not find {path}, upload failed')
     except ConnectionError:
         print(f'failed to connect with {host}:{port}')
-    except Exception:
-        print(f'Failed to read {path} and upload to {host}:{port}')
+    except Exception as err:
+        print(f'Failed to read {path} and upload to {host}:{port}, err={err}')
