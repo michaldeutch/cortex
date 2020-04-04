@@ -1,6 +1,6 @@
 import json
 
-from utils.impl_store import ImplementationStore
+from ..impl_store import ImplementationStore
 from google.protobuf.json_format import MessageToJson
 
 """
@@ -24,6 +24,12 @@ class Serializer:
         @staticmethod
         def serialize(message):
             return json.loads(MessageToJson(message))
+
+    @impl_store.implementation('json')
+    class Json2BytesSer:
+        @staticmethod
+        def serialize(message):
+            return json.dumps(message)
 
     def __init__(self, content_type):
         self.impl = self.impl_store.get_impl(content_type)()

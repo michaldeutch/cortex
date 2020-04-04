@@ -1,5 +1,5 @@
-from utils.impl_store import ImplementationStore
-from cortex.messages import cortex_pb2 as mind
+from ..impl_store import ImplementationStore
+from ..messages import cortex_pb2 as mind
 
 
 class Deserializer:

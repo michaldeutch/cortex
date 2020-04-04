@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from cortex.serdes.serializers import Serializer
+from cortex.utils.serdes.serializers import Serializer
 from cortex.server.publish_manager import PublishManager
 from tests.conftest import USER_ID
 
@@ -37,15 +37,15 @@ def test_save_snapshot_image(publisher):
 
 
 def test_prepare_user(publisher, user):
-    serialized_user = publisher._prepare_message(USER_ID, user, _CONTENT_TYPE)
+    serialized_user = json.loads(publisher._prepare_message(USER_ID, user, _CONTENT_TYPE))
     assert serialized_user['userId'] == str(USER_ID)
     assert serialized_user['user']['userId'] == str(USER_ID)
 
 
 def test_prepare_snapshot(publisher, snapshot):
-    serialized_snap = publisher._prepare_message(USER_ID, snapshot,
+    serialized_snap = json.loads(publisher._prepare_message(USER_ID, snapshot,
                                                  _CONTENT_TYPE,
-                                                 is_snapshot=True)
+                                                 is_snapshot=True))
     assert serialized_snap['userId'] == str(USER_ID)
     assert serialized_snap['snapshot']
 

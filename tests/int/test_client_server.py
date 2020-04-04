@@ -9,14 +9,14 @@ from cortex.server import run_server
 messages = []
 
 
-def test_client_upload(web_server, host, port, mind_file):
+def test_client_upload(local_server, host, port, mind_file):
     upload_sample(host=host, port=port, path=str(mind_file))
     time.sleep(1)
     assert len(messages) == 2
 
 
 @pytest.fixture
-def web_server(host, port):
+def local_server(host, port):
     def publish(message):
         messages.append(message)
 

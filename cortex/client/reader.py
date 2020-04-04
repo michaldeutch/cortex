@@ -1,7 +1,7 @@
 import pathlib
 import struct
 import gzip
-from cortex.serdes.deserializers import Deserializer
+from ..utils.serdes.deserializers import Deserializer
 
 
 class Reader:

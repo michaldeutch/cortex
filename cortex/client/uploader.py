@@ -1,6 +1,6 @@
 import requests
 import logging
-from cortex.serdes.serializers import Serializer
+from ..utils.serdes.serializers import Serializer
 
 
 logger = logging.getLogger(__name__)

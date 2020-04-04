@@ -1,19 +1,19 @@
 import struct
 
 import pytest
-from cortex.messages import cortex_pb2 as mind
+from cortex.utils.messages import cortex_pb2 as mind
 
 USER_ID = 123
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def host():
     return 'localhost'
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def port():
-    return 7000
+    return 8000
 
 
 @pytest.fixture(scope='session')

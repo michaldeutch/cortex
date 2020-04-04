@@ -1,12 +1,15 @@
+import logging
 from concurrent.futures import ThreadPoolExecutor
 
 from flask import Flask
 from flask import request
 
-from cortex.server.publish_manager import PublishManager
+from .publish_manager import PublishManager
 
 app = Flask(__name__)
 NUM_THREADS = 5
+
+logger = logging.getLogger(__name__)
 
 
 def run_server(host, port, publish):

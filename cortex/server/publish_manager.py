@@ -4,8 +4,8 @@ import os
 import logging
 import shutil
 
-from cortex.serdes.deserializers import Deserializer
-from cortex.serdes.serializers import Serializer
+from ..utils.serdes.deserializers import Deserializer
+from ..utils.serdes.serializers import Serializer
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class PublishManager:
         shutil.rmtree(self.temp_dir)
 
     def __repr__(self):
-        return f'PublishManager with publisher={self.publisher}, ' \
+        return f'PublishManager with publisher={self.publish_method}, ' \
                f'saves images to {self.temp_dir}'
 
     def publish_user(self, user_id, data, content_type):
@@ -38,16 +38,17 @@ class PublishManager:
 
     def _prepare_message(self, user_id, content, content_type,
                          is_snapshot=False):
-        serializer = Serializer(f'{content_type}2json')
-        serialized_content = serializer.serialize(content)
+        to_json_serializer = Serializer(f'{content_type}2json')
+        serialized_content = to_json_serializer.serialize(content)
         message = 'user'
         if is_snapshot:
             message = 'snapshot'
             self._save_snapshot_images(serialized_content)
-        return {
+        ret = {
             'userId': str(user_id),  # longs are strings
             message: serialized_content
         }
+        return Serializer('json').serialize(ret)
 
     def _save_snapshot_images(self, snapshot):
         def save_image(image_name):

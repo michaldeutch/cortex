@@ -4,7 +4,7 @@ from collections import defaultdict
 
 import pika as pika
 
-from utils.impl_store import ImplementationStore
+from ..utils.impl_store import ImplementationStore
 from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
@@ -28,14 +28,18 @@ class Publisher:
         def __init__(self, url):
             self.connection = pika.BlockingConnection(
                 pika.ConnectionParameters(host=url.hostname, port=url.port))
+            logger.info(f'opened connection={self.connection}')
             self.channels = defaultdict(self.create_channel)
 
         def publish(self, message):
             channel = self.channels[threading.get_ident()]
-            channel.basic_publish(exchange='', routing_key='thoughts',
-                                  body=message)
-            logger.debug(f'rabbitMQ publisher published message, '
-                         f'id={threading.get_ident()}')
+            try:
+                channel.basic_publish(exchange='', routing_key='thoughts',
+                                      body=message)
+                logger.debug(f'rabbitMQ publisher published message, '
+                            f'id={threading.get_ident()}')
+            except Exception as err:
+                logger.error(f'failed to publish message={message}, channel={channel}', err)
 
         def create_channel(self):
             channel = self.connection.channel()
