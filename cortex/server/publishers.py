@@ -34,16 +34,18 @@ class Publisher:
         def publish(self, message):
             channel = self.channels[threading.get_ident()]
             try:
-                channel.basic_publish(exchange='', routing_key='thoughts',
+                channel.basic_publish(exchange='thoughts', routing_key='',
                                       body=message)
                 logger.debug(f'rabbitMQ publisher published message, '
                             f'id={threading.get_ident()}')
             except Exception as err:
-                logger.error(f'failed to publish message={message}, channel={channel}', err)
+                logger.error(f'failed to publish message={message}, '
+                             f'channel={channel}', err)
 
         def create_channel(self):
             channel = self.connection.channel()
-            channel.queue_declare(queue='thoughts')
+            channel.exchange_declare(exchange='thoughts',
+                                     exchange_type='fanout')
             return channel
 
         def close(self):

@@ -6,6 +6,8 @@ build() {
   docker build -t cortex-base .
   echo "======== Building cortex-server ========"
   docker build -t cortex-server cortex/server
+  echo "======== Building cortex-parser ========"
+  docker build -t cortex-parser cortex/parsers
 }
 
 run() {
@@ -15,8 +17,10 @@ run() {
   sleep 1m
   echo "========= Running server ========="
   docker run --rm -d --network=host cortex-server:latest
-  echo "going to sleep.. wait for server to stabilize"
-  sleep 10
+  echo "======= Running pose parser ======"
+  docker run --rm -d --network=host -e "PARSER=pose" cortex-parser:latest
+  echo "====== Running color parser ======"
+  docker run --rm -d --network=host -e "PARSER=color_image"cortex-parser:latest
 }
 
 build
