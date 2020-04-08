@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 import pika
 
-from . import parsers
+from . import parser
 
 
 class ParserManager:
@@ -16,7 +16,7 @@ class ParserManager:
 
     def _load_parsers(self):
         for loader, module_name, is_pkg in pkgutil.walk_packages(
-                parsers.__path__):
+                parser.__path__):
             if is_pkg:
                 continue
             module = loader.find_module(module_name).load_module(module_name)
@@ -34,12 +34,12 @@ class ParserManager:
                                f'parsers= {self._parsers.keys()}')
         parser = ParserManager._parsers[name]
         message = json.loads(data)
-        if message.user:
+        if 'user' in message:
             return ''  # no parser uses user message
         return json.dumps({
-            'user_id': data.user_id,
-            'content': parser(message.snapshot[name]),
-            'timestamp': message.snapshot.datetime
+            'userId': message['userId'],
+            'content': parser(message['snapshot'][name]),
+            'timestamp': message['snapshot']['datetime']
         })
 
     def run(self, name, url):

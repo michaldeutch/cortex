@@ -2,7 +2,7 @@ import sys
 import logging
 import click
 
-from cortex.parsers import ParserManager
+from .parser_manager import ParserManager
 
 logger = logging.getLogger(__name__)
 

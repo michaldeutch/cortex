@@ -39,8 +39,7 @@ class Publisher:
                 logger.debug(f'rabbitMQ publisher published message, '
                             f'id={threading.get_ident()}')
             except Exception as err:
-                logger.error(f'failed to publish message={message}, '
-                             f'channel={channel}', err)
+                logger.error(f'failed to publish message, error={err}')
 
         def create_channel(self):
             channel = self.connection.channel()

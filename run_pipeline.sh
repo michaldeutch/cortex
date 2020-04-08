@@ -20,7 +20,7 @@ run() {
   echo "======= Running pose parser ======"
   docker run --rm -d --network=host -e "PARSER=pose" cortex-parser:latest
   echo "====== Running color parser ======"
-  docker run --rm -d --network=host -e "PARSER=color_image"cortex-parser:latest
+  docker run --rm -d --network=host -e "PARSER=color_image" cortex-parser:latest
 }
 
 build
