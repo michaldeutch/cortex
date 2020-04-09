@@ -31,5 +31,5 @@ if __name__ == '__main__':
             print('TRY: python -m cortex.parsers parse/run-parser --help')
     except Exception as error:
         logger.error('parsers main failed', error)
-        print(f'An error occurred while running client, {error}')
+        print(f'An error occurred while running parser, {error}')
         sys.exit(1)

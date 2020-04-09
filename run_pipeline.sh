@@ -16,6 +16,8 @@ build() {
 run() {
   echo "======== Running rabbitmq ========"
   docker run --rm -d -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+  echo "======== Running mongodb ========"
+  docker run --rm -it -d --network=host mongo:latest
   echo "going to sleep.. wait for rabbitmq to stabilize"
   sleep 1m
   echo "========= Running server ========="

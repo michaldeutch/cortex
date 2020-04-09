@@ -27,5 +27,5 @@ if __name__ == '__main__':
             print('TRY: python -m cortex.server run-server --help')
     except Exception as error:
         logger.error('server main failed', error)
-        print(f'An error occurred while running client, {error}')
+        print(f'An error occurred while running server, {error}')
         sys.exit(1)
