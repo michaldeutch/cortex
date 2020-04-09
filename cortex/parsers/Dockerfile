@@ -1,5 +1,5 @@
 # when running the docker use -e "PARSER=<parser_name>"
-# to define the running parser
+# to define the running parsers
 
 FROM cortex-base:latest
 

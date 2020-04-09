@@ -6,13 +6,14 @@ import shutil
 
 from ..utils.serdes.deserializers import Deserializer
 from ..utils.serdes.serializers import Serializer
+from ..utils.storage import storage_dir
 
 logger = logging.getLogger(__name__)
 
 
 class PublishManager:
     def __init__(self, publish_method):
-        self.temp_dir = tempfile.mkdtemp()
+        self.temp_dir = tempfile.mkdtemp(dir=storage_dir)
         self.publish_method = publish_method
 
     def __enter__(self):
@@ -45,7 +46,7 @@ class PublishManager:
             message = 'snapshot'
             self._save_snapshot_images(serialized_content)
         ret = {
-            'userId': str(user_id),  # longs are strings
+            'user_id': str(user_id),  # longs are strings
             message: serialized_content
         }
         return Serializer('json').serialize(ret)
@@ -54,19 +55,20 @@ class PublishManager:
         def save_image(image_name):
             try:
                 image = snapshot[image_name]
-                width = image['width']
-                height = image['height']
-                fd, path = tempfile.mkstemp(suffix=f'{width}x{height}',
-                                            dir=self.temp_dir)
+                fd, path = tempfile.mkstemp(dir=self.temp_dir)
                 self._save_data(image['data'], fd)
-                snapshot[image_name] = path
+                snapshot[image_name] = {
+                    'width': image['width'],
+                    'height': image['height'],
+                    'path': path
+                }
             except Exception as err:
                 logger.error(f'failed to save {image_name},'
                              f' {err}')
-        save_image('colorImage')
-        save_image('depthImage')
+        save_image('color_image')
+        save_image('depth_image')
 
     @staticmethod
-    def _save_data(data, fd):  # TODO - save image in a better format
+    def _save_data(data, fd):
         with os.fdopen(fd, 'w') as tmp:
             tmp.write(json.dumps(data))

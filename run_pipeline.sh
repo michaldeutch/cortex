@@ -1,7 +1,10 @@
 #!/bin/bash
 
+DOCKER_FLAGS='--rm -d --network=host -v cortex-volume:cortex-storage'
 
 build() {
+  echo "=========== Creating Volume ============"
+  docker volume create --name cortex-volume
   echo "========= Building cortex-base ========="
   docker build -t cortex-base .
   echo "======== Building cortex-server ========"
@@ -16,12 +19,19 @@ run() {
   echo "going to sleep.. wait for rabbitmq to stabilize"
   sleep 1m
   echo "========= Running server ========="
-  docker run --rm -d --network=host cortex-server:latest
+  docker run "$DOCKER_FLAGS" cortex-server:latest
   echo "======= Running pose parser ======"
-  docker run --rm -d --network=host -e "PARSER=pose" cortex-parser:latest
+  docker run "$DOCKER_FLAGS" -e "PARSER=pose" cortex-parser:latest
   echo "====== Running color parser ======"
-  docker run --rm -d --network=host -e "PARSER=color_image" cortex-parser:latest
+  docker run "$DOCKER_FLAGS" -e "PARSER=color_image" cortex-parser:latest
 }
 
-build
-run
+if [ "$1" == 'build' ]; then
+  build
+else
+  if [ "$1" == 'run' ]; then
+  run
+  else
+    build && run
+  fi
+fi

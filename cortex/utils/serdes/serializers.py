@@ -23,7 +23,9 @@ class Serializer:
     class Proto2JsonSer:
         @staticmethod
         def serialize(message):
-            return json.loads(MessageToJson(message))
+            return json.loads(MessageToJson(message,
+                                            preserving_proto_field_name=True,
+                                            float_precision=20))
 
     @impl_store.implementation('json')
     class Json2BytesSer:
