@@ -30,7 +30,7 @@ def docker_rabbitmq():
 
 
 @pytest.fixture(scope='session')
-def docker_server(docker_rabbitmq, port):
+def docker_server(docker_rabbitmq, server_port):
     container = docker.from_env().containers.run("cortex-server:latest", auto_remove=True, network_mode='host', detach=True)
     time.sleep(10)
     yield

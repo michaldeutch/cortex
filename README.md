@@ -1,6 +1,6 @@
 ![build status](https://api.travis-ci.com/michaldeutch/cortex.svg?branch=master)
-![coverage](https://codecov.io/gh/michaldeutch/ASDServerClient/branch/master/graph/badge.svg)
-# ASDServerClient
+![coverage](https://codecov.io/gh/michaldeutch/cortex/branch/master/graph/badge.svg)
+# cortex
 
 An example package. See [full documentation](https://advanced-system-design-foobar.readthedocs.io/en/latest/).
 

@@ -15,13 +15,13 @@ def test_upload_failure(uploader):
 
 
 @pytest.fixture
-def uploader(host, port):
+def uploader(host, server_port):
     @Serializer.impl_store.implementation('text')
     class S:
         @staticmethod
         def serialize(message):
             return b'serialized-message'
-    return Uploader(host, port, USER_ID, content_type='text')
+    return Uploader(host, server_port, USER_ID, content_type='text')
 
 
 

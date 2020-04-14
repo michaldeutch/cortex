@@ -11,14 +11,14 @@ app = Flask(__name__)
 
 
 @pytest.fixture
-def web_server(host, port):
+def web_server(host, server_port):
 
     def run_web():
         @app.route('/user/<user_id>', methods=['POST'])
         def post(user_id):
             assert user_id == str(USER_ID)
             return '200'
-        app.run(host, port)
+        app.run(host, server_port)
 
     process = multiprocessing.Process(target=run_web)
     process.start()

@@ -30,7 +30,6 @@ class Saver:
                     try:
                         parser_name = routing_key.split('.')[1]
                         self.save_parser_result(db, parser_name, body)
-                        print(f'got message for parser {parser_name}')
                         return True
                     except Exception as err:
                         logger.error(f'failed to save message={body} '
@@ -38,13 +37,11 @@ class Saver:
                         return False
 
                 def user_callback(routing_key, body):
-                    print(f'user_callback!!! {routing_key}, {body}')
                     try:
                         message = json.loads(body)
                         if 'user' in message:
                             db.store_user(message['user_id'], message[
                                 'user'])
-                            print('got user message!!!!!!!!!!!')
                         return True
                     except Exception as err:
                         logger.error(f'failed to save user message='
