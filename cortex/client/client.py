@@ -1,10 +1,6 @@
 import logging
-import struct
-from datetime import datetime
-
 from .uploader import Uploader
 from .reader import Reader
-from ..utils.messages.cortex_pb2 import User
 
 logger = logging.getLogger(__name__)
 
@@ -20,8 +16,7 @@ def upload_sample(host, port, path):
             uploader.upload_snapshot(snapshot)
             logger.debug(f'Uploaded snapshot message for userId'
                          f'={user.user_id}')
-    except FileNotFoundError:  # TODO - not sure if this is enough,
-        # maybe log the error
+    except FileNotFoundError:
         print(f'Could not find {path}, upload failed')
     except ConnectionError:
         print(f'failed to connect with {host}:{port}')

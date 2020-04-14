@@ -15,8 +15,5 @@ class DepthImageParser:
         with open(depth_image['path'], 'r') as content_file:
             content = json.loads(content_file.read())
             data = np.reshape(content, (-1, depth_image['width']))
-            # print(data)
-            # plt.imshow(data,
-            #            cmap='hot', interpolation='nearest')
             plt.imsave(path, data, cmap='hot')
         return path
