@@ -1,4 +1,4 @@
-![build status](https://api.travis-ci.org/michaldeutch/ASDServerClient.svg?branch=master)
+![build status](https://api.travis-ci.com/michaldeutch/cortex.svg?branch=master)
 ![coverage](https://codecov.io/gh/michaldeutch/ASDServerClient/branch/master/graph/badge.svg)
 # ASDServerClient
 
