@@ -4,6 +4,7 @@ python:
 install:
   - pip install codecov
   - pip install coverage
+  - pip install pytest-cov
   - pip install -r requirements.txt
 script:
   - pytest --cov-report term --cov=cortex/server --cov=cortex/client --cov=cortex/saver --cov=cortex/parsers
