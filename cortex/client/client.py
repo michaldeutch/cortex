@@ -1,11 +1,14 @@
 import logging
+import struct
+from datetime import datetime
+
 from .uploader import Uploader
 from .reader import Reader
+from ..utils.messages.cortex_pb2 import User
 
 logger = logging.getLogger(__name__)
 
 
-# TODO - add integration test
 def upload_sample(host, port, path):
     try:
         reader = Reader(path, content_type='proto')

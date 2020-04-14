@@ -2,7 +2,7 @@ import sys
 import logging
 import click
 
-from .publishers import Publisher
+from cortex.server.publishers import Publisher
 from .server import run_server
 
 logger = logging.getLogger(__name__)

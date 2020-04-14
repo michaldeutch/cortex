@@ -12,16 +12,17 @@ logger = logging.getLogger(__name__)
 @click.argument('parser_topic', type=str)
 @click.argument('parser_result', type=str)
 def save(database_url, parser_topic, parser_result):
-    with Saver(database_url) as saver:
-        saver.save(parser_topic, parser_result)
+    saver = Saver(database_url)
+    with open(parser_result, "r") as result:
+        saver.save(parser_topic, result.read())
 
 
 @click.command()
 @click.argument('database_url', type=str)
 @click.argument('message_queue_url', type=str)
 def run_saver(database_url, message_queue_url):
-    with Saver(database_url) as saver:
-        saver.run(message_queue_url)
+    saver = Saver(database_url)
+    saver.run(message_queue_url)
 
 
 if __name__ == '__main__':

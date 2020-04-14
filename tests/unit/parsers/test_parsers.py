@@ -1,4 +1,5 @@
 import os
+import time
 from pathlib import Path
 
 import pytest
@@ -15,6 +16,7 @@ def test_rgrs_color_image(input_dir, expected_output_dir):
     parser = ColorImageParser()
     image = parser.parse(color_image)
     assert image.endswith('.jpg')
+    time.sleep(5)
     assert_equal_pictures(f'{expected_output_dir}/color_image.jpg', image)
     os.remove(image)
 

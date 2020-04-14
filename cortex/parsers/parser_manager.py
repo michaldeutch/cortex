@@ -1,11 +1,14 @@
 import inspect
 import json
+import logging
 import pkgutil
 from urllib.parse import urlparse
 
-import pika
-
 from . import parsers
+from ..utils.rabbit_util.consumer import RabbitConsumer
+from ..utils.rabbit_util.publisher import RabbitPublisher
+
+logger = logging.getLogger(__name__)
 
 
 class ParserManager:
@@ -30,44 +33,50 @@ class ParserManager:
 
     def run_parser(self, name, data):
         if name not in self._parsers:
-            raise RuntimeError(f'parsers {name} does not exists. Existing '
-                               f'parsers= {self._parsers.keys()}')
+            logger.error(f'parsers {name} does not exists. Existing '
+                         f'parsers= {self._parsers.keys()}')
+            return ''
         parser = ParserManager._parsers[name]
         message = json.loads(data)
         if 'user' in message:
             return ''  # no parsers uses user message
-        return json.dumps({
-            'userId': message['userId'],
-            'content': json.dumps(parser(message['snapshot'][name])),
-            'timestamp': message['snapshot']['datetime']
-        })
+        try:
+            res = parser(message['snapshot'][name])
+            if not res:
+                return ''
+            return json.dumps({
+                'user_id': message['user_id'],
+                'content': json.dumps(res),
+                'timestamp': message['snapshot']['datetime']
+            })
+        except Exception as err:
+            logger.error(f'parser {name} failed to parse message {message}',
+                         err)
+            return ''
 
     def run(self, name, url):
-
         def rabbit_run():
-            connection = pika.BlockingConnection(
-                pika.ConnectionParameters(host=url.hostname, port=url.port))
-            consumer_channel = connection.channel()
-            publisher_channel = connection.channel()
-            consumer_channel.exchange_declare(exchange='thoughts',
-                                              exchange_type='fanout')
-            publisher_channel.exchange_declare(exchange='parsers',
-                                               exchange_type='topic')
+            publisher = RabbitPublisher(url, exchange='parsers',
+                                        exchange_type='topic')
+            snap_consumer = RabbitConsumer(url, exchange='thoughts',
+                                           exchange_type='fanout')
 
-            result = consumer_channel.queue_declare(queue='', exclusive=True)
-            queue_name = result.method.queue
+            def callback(routing_key, body):
+                try:
+                    message = self.run_parser(name, body)
+                    if message != '':
+                        publisher.publish(routing_key=f'parser.{name}',
+                                          body=message)
+                        print(f'published message={message}')
+                    return True
+                except Exception as err:
+                    logger.error(f'failed to publish message to parser='
+                                 f'{name}', err)
+                    return False
 
-            consumer_channel.queue_bind(exchange='thoughts', queue=queue_name)
+            snap_consumer.consume(callback)
+            snap_consumer.close()
+            publisher.close()
 
-            def callback(ch, method, properties, body):
-                publisher_channel.basic_publish(
-                    exchange='parsers', routing_key=name, body=self.run_parser(
-                        name, body))
-
-            consumer_channel.basic_consume(
-                queue=queue_name, on_message_callback=callback, auto_ack=True)
-            consumer_channel.start_consuming()
-
-        url = urlparse(url)
-        if url.scheme == 'rabbitmq':
+        if urlparse(url).scheme == 'rabbitmq':
             rabbit_run()

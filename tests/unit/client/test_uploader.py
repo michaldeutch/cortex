@@ -1,6 +1,6 @@
 import pytest
 
-from cortex.utils.serdes.serializers import Serializer
+from cortex.utils.serdes_util.serializers import Serializer
 from cortex.client.uploader import Uploader
 from tests.conftest import USER_ID
 

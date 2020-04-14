@@ -1,6 +1,6 @@
 import requests
 import logging
-from ..utils.serdes.serializers import Serializer
+from ..utils.serdes_util.serializers import Serializer
 
 
 logger = logging.getLogger(__name__)

@@ -1,7 +1,7 @@
 import json
 import tempfile
 
-from cortex.utils.storage import storage_dir
+from cortex.utils.storage_util import storage_dir
 import matplotlib.pyplot as plt
 import numpy as np
 

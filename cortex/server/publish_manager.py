@@ -4,9 +4,9 @@ import os
 import logging
 import shutil
 
-from ..utils.serdes.deserializers import Deserializer
-from ..utils.serdes.serializers import Serializer
-from ..utils.storage import storage_dir
+from ..utils.serdes_util.deserializers import Deserializer
+from ..utils.serdes_util.serializers import Serializer
+from ..utils.storage_util import storage_dir
 
 logger = logging.getLogger(__name__)
 

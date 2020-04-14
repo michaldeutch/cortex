@@ -1,6 +1,6 @@
 import json
 
-from ..impl_store import ImplementationStore
+from ..impl_util import ImplementationStore
 from google.protobuf.json_format import MessageToJson
 
 """

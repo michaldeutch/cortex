@@ -1,4 +1,4 @@
-from ..impl_store import ImplementationStore
+from ..impl_util import ImplementationStore
 from ..messages import cortex_pb2 as mind
 
 

@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from cortex.utils.serdes.serializers import Serializer
+from cortex.utils.serdes_util.serializers import Serializer
 from cortex.server.publish_manager import PublishManager
 from tests.conftest import USER_ID
 

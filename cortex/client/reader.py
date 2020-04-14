@@ -1,7 +1,7 @@
 import pathlib
 import struct
 import gzip
-from ..utils.serdes.deserializers import Deserializer
+from ..utils.serdes_util.deserializers import Deserializer
 
 
 class Reader:
@@ -35,10 +35,6 @@ class Reader:
         b = self.rp.read(1)
         self.rp.seek(-1, 1)
         return False if b else True
-
-    def _get_next_message(self):
-        message_len, = struct.unpack('I', self.rp.read(4))
-        return self.rp.read(message_len)
 
     def _parse_user(self):
         message_bytes = self._get_message_bytes()

@@ -11,7 +11,6 @@ COPY cortex/__init__.py /usr/src/cortex/__init__.py
 RUN mkdir /usr/src/cortex/utils
 COPY cortex/utils /usr/src/cortex/utils/
 
-
 RUN apt-get update \
   && apt-get install -y python3.8 python3-pip\
   && python3.8 -m pip install --upgrade pip setuptools wheel \
