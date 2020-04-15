@@ -1,4 +1,3 @@
-from cortex.utils.db_util import Database
 from .api_server import run_api_server
 import sys
 import logging
@@ -13,10 +12,9 @@ logger = logging.getLogger(__name__)
 @click.option('-p', '--port', type=int, help='Run server on this port',
               default=5000)
 @click.option('-d', '--database', type=str, help='Access this db, should be '
-                                                 'like mongodb://<ip>:<port>/')
+                                                 'like mongodb://<ip>:<port>/', default='mongodb://127.0.0.1:27017/')
 def main(host, port, database):
-    with Database(database) as db:
-        run_api_server(host, port, db)
+    run_api_server(host, port, database)
 
 
 if __name__ == '__main__':

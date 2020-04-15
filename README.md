@@ -9,9 +9,9 @@ An example package. See [full documentation](https://advanced-system-design-foob
 1. Clone the repository and enter it:
 
     ```sh
-    $ git clone git@github.com:michaldeutch/ASDServerClient.git
+    $ git clone git@github.com:michaldeutch/cortex.git
     ...
-    $ cd foobar/
+    $ cd cortex/
     ```
 
 2. Run the installation script and activate the virtual environment:
@@ -20,11 +20,10 @@ An example package. See [full documentation](https://advanced-system-design-foob
     $ ./scripts/install.sh
     ...
     $ source .env/bin/activate
-    [serverclient] $ # you're good to go!
+    [cortex] $ # you're good to go!
     ```
 
 3. To check that everything is working as expected, run the tests:
-
 
     ```sh
     $ pytest tests/

@@ -38,7 +38,7 @@ class ParserManager:
             return ''
         parser = ParserManager._parsers[name]
         message = json.loads(data)
-        if 'user' in message:
+        if 'user' in message or name not in message['snapshot']:
             return ''  # no parsers uses user message
         try:
             res = parser(message['snapshot'][name])

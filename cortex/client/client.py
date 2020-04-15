@@ -1,6 +1,9 @@
 import logging
 from .uploader import Uploader
 from .reader import Reader
+from google.protobuf.json_format import MessageToJson
+
+from ..utils.messages.cortex_pb2 import Feelings, Pose, ColorImage, DepthImage
 
 logger = logging.getLogger(__name__)
 

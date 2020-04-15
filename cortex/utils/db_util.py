@@ -56,8 +56,8 @@ class Database:
             return user['info']
 
         def snapshots(self, user_id):
-            snapshots = self.db[f'user_{user_id}']
-            for snapshot in snapshots.find():
+            user_snapshots = self.db[f'user_{user_id}']
+            for snapshot in user_snapshots.find():
                 yield {'snapshot_id': str(snapshot['_id']), 'datetime':
                     snapshot['timestamp']}
 

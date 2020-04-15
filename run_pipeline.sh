@@ -13,14 +13,8 @@ build() {
   docker build -t cortex-base .
   echo "======== Building cortex-server ========"
   docker build -t cortex-server cortex/server
-  echo "========= Building cortex-pose ========="
-  docker build -t cortex-pose cortex/parsers
-  echo "======= Building cortex-feelings ======="
-  docker build -t cortex-feelings cortex/parsers
-  echo "======== Building cortex-color ========="
-  docker build -t cortex-color cortex/parsers
-  echo "======== Building cortex-depth ========="
-  docker build -t cortex-depth cortex/parsers
+  echo "========= Building cortex-parser ========="
+  docker build -t cortex-parser cortex/parsers
   echo "======== Building cortex-saver ========="
   docker build -t cortex-saver cortex/saver
   echo "========= Building cortex-api =========="
@@ -37,13 +31,13 @@ run() {
   echo "========= Running server ========="
   docker run $DOCKER_FLAGS -p 8000:8000 cortex-server:latest
   echo "======= Running pose parser ======"
-  docker run $DOCKER_FLAGS -e "PARSER=pose" cortex-pose:latest
+  docker run $DOCKER_FLAGS -e "PARSER=pose" cortex-parser:latest
   echo "==== Running feelings parser ====="
-  docker run $DOCKER_FLAGS -e "PARSER=color_feelings" cortex-feelings:latest
+  docker run $DOCKER_FLAGS -e "PARSER=color_feelings" cortex-parser:latest
   echo "====== Running color parser ======"
-  docker run $DOCKER_FLAGS -e "PARSER=color_image" cortex-color:latest
+  docker run $DOCKER_FLAGS -e "PARSER=color_image" cortex-parser:latest
   echo "====== Running depth parser ======"
-  docker run $DOCKER_FLAGS -e "PARSER=depth_image" cortex-depth:latest
+  docker run $DOCKER_FLAGS -e "PARSER=depth_image" cortex-parser:latest
   echo "========= Running saver =========="
   docker run $DOCKER_FLAGS cortex-saver:latest
   echo "========== Running api ==========="
