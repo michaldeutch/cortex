@@ -24,7 +24,7 @@ def run_api_server(host, port, database_url):
             user = db.get_user(user_id)
             if 'birthday' in user:
                 user['birthday'] = datetime.fromtimestamp(user['birthday'] /
-                                                          1000).date()
+                                                          1000).strftime("%d %B, %Y")
             return jsonify(user)
 
         @app.route('/users/<user_id>/snapshots', methods=['GET'])
@@ -33,7 +33,7 @@ def run_api_server(host, port, database_url):
             for snap in db.snapshots(user_id):
                 if 'datetime' in snap:
                     snap['datetime'] = datetime.fromtimestamp(int(snap['datetime']) / 1000)
-                    user_snapshots.append(snap)
+                user_snapshots.append(snap)
             return jsonify(user_snapshots)
 
         @app.route('/users/<user_id>/snapshots/<snapshot_id>', methods=['GET'])
