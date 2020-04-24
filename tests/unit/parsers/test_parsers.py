@@ -3,8 +3,12 @@ import time
 from pathlib import Path
 
 import pytest
+from google.protobuf.json_format import MessageToJson
+
 from cortex.parsers.parsers.color_image import ColorImageParser
 from cortex.parsers.parsers.depth_image import DepthImageParser
+from cortex.parsers.parsers.feelings import parse_feelings
+from cortex.parsers.parsers.pose import parse_pose
 
 
 def test_rgrs_color_image(input_dir, expected_output_dir):
@@ -32,6 +36,16 @@ def test_rgrs_depth_image(input_dir, expected_output_dir):
     assert image.endswith('.png')
     assert_equal_pictures(f'{expected_output_dir}/depth_image.png', image)
     os.remove(image)
+
+
+def test_rgrs_feelings(snapshot):
+    feelings = MessageToJson(snapshot.feelings)
+    assert feelings == parse_feelings(feelings)
+
+
+def test_rgrs_pose(snapshot):
+    pose = MessageToJson(snapshot.pose)
+    assert pose == parse_pose(pose)
 
 
 def assert_equal_pictures(expected, found):

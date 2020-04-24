@@ -22,4 +22,4 @@ def run_server(host, port, api_host, api_port):
     os.environ['HOST'] = str(host)
     print('starting server.. wait for about 60 seconds')
     subprocess.run([f'cd {dirname}/app && yarn start'],
-                   shell=True, stdout=subprocess.DEVNULL)
+                    shell=True, stdout=subprocess.DEVNULL)

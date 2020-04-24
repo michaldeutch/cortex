@@ -4,6 +4,8 @@ RUN mkdir /usr/src/cortex/api
 
 COPY ./*.py /usr/src/cortex/api/
 
+EXPOSE 5000
+
 CMD cd /usr/src/ && python -m cortex.api run-server \
       -h 0.0.0.0 \
       -d 'mongodb://mongodb:27017/'   \

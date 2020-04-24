@@ -74,7 +74,7 @@ def db(user, snapshot):
             snapshots = self.snapshots[f'user_{user_id}']
             if timestamp not in snapshots:
                 snapshots[timestamp] = {}
-            snapshot[timestamp][parser_name] = parser_result
+            snapshots[timestamp][parser_name] = parser_result
 
         def users(self):
             for user_id, info in self.users.__iter__():
@@ -112,11 +112,19 @@ def db(user, snapshot):
                 return snap[image_type][0]
             return ''
 
-    db = MockDB()
-    db.store_user(user.user_id, MessageToJson(user))
-    db.store_parser_result(user.user_id, snapshot.datetime, 'pose',
-                           MessageToJson(snapshot.pose))
-    return db
+    class MockDBWrapper:
+        db = None
+
+        def __init__(self, url=None):
+            MockDBWrapper.db = MockDB()
+
+        def __enter__(self):
+            return self.db
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            pass
+
+    return MockDBWrapper
 
 
 def serialize_to_file(rp, entity):

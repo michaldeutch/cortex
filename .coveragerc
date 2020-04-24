@@ -1,0 +1,6 @@
+[run]
+omit =
+    */cortex/server/__main__.py
+    */cortex/client/__main__.py
+    */cortex/saver/__main__.py
+    */cortex/parsers/__main__.py

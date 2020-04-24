@@ -13,11 +13,12 @@ class Saver:
     parsers = ['parser.feelings', 'parser.pose', 'parser.color_image',
                'parser.depth_image']
 
-    def __init__(self, database_url):
+    def __init__(self, database_url, database=Database):
         self.url = database_url
+        self.database = database
 
     def save(self, parser, data):
-        with Database(self.url) as db:
+        with self.database(self.url) as db:
             self.save_parser_result(db, parser, data)
 
     def run(self, url):

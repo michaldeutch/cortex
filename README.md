@@ -2,8 +2,6 @@
 ![coverage](https://codecov.io/gh/michaldeutch/cortex/branch/master/graph/badge.svg)
 # cortex
 
-An example package. See [full documentation](https://advanced-system-design-foobar.readthedocs.io/en/latest/).
-
 ## Installation
 
 1. Clone the repository and enter it:
@@ -30,69 +28,184 @@ An example package. See [full documentation](https://advanced-system-design-foob
     ...
     ```
 
+## Quick Start
+
+1. Run everything:
+
+    ```sh
+    $ ./run_pipeline.sh
+    ```
+   
+2. Send you own .mind file (can be .mind.gz):
+
+    ```sh
+    $ python -m cortex.client upload-sample <mind_file>
+    ```
+  
+3. Wait for it to finish and check out your browser at 'http://localhost:8080/'
+
+## HowTo add Parser?
+
+1. Add your on `<parser>.py` file [here](cortex/parsers/parsers)
+
+2. Declare in `<parser>.py` one of the two:
+    
+    * Class in the format:
+    
+        ```python
+    class MyParser:
+        field = 'parser_name'
+        def parse(self, data):
+            pass
+        ```
+      
+    * Method in the format:
+    
+        ```python
+    def parse_parser(data):
+      pass
+  
+    parse_parser.field = 'parser_name'
+        ```
+
+
 ## Usage
 
-The `serverclient` packages provides the following classes:
+* Client
 
-- `Thought`
+    ```python
+  from cortex.client import upload_sample
 
-    This class encapsulates the concept of `thought`, which includes the
-     `user id`, `timestamp`, and the thought itself.
+  upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gz')
 
+    ```
+  
+  or
+  
+  ```sh
+  $ python -m cortex.client upload-sample \
+      -h/--host '127.0.0.1'             \
+      -p/--port 8000                    \
+      'snapshot.mind.gz'
 
-The `serverclient` packages provides the following functionalities:
+  ```
+  
 
-- `run_server(host, port, data)`
+* Server
 
-    This function allows running a server on address host;port, 
-    and uses directory <data> to store information.
-    
-- `run_webserver(address, data)`
-    This function allows running a web server on address host;port, 
-    and uses directory <data> to store information.
-    
-- `upload_thought(address, user, thought)`
+    ```python
+  from cortex.server import run_server
+  def print_message(message):
+      print(message)
+  run_server(host='127.0.0.1', port=8000, publish=print_message)
+    ```
+  
+  or
+  
+  ```sh
+  $ python -m cortex.server run-server \
+      -h/--host '127.0.0.1'          \
+      -p/--port 8000                 \
+      'rabbitmq://127.0.0.1:5672/'
+  ```
+  
+* Parser
 
-    This function is used to upload thought that is related to a certain
-    user, to the server running on address.
+    ```python
+  from cortex.parsers import run_parser
+  data = {'snapshot': ..., 'user_id': 1}
+  result = run_parser('pose', data)
+    ```
+  
+  or
+  
+  ```sh
+  $  python -m cortex.parsers parse 'pose' 'snapshot.raw' > 'pose.result'
+  ```
+  
+  ```sh
+  $   python -m cortex.parsers run-parser 'pose' 'rabbitmq://127.0.0.1:5672/'
+  ```
+  
+* Saver
 
-The `serverclient` package also provides a command-line interface:
+    ```python
+  from cortex.saver import Saver
+  import json
+  
+  saver = Saver(database_url='mongodb://127.0.0.1/27017')
+  saver.save('pose', json.dumps({
+        'user_id': 1,
+        'timestamp': 132,
+        'content': 'data'
+    }))
+    ```
+  
+  or
+  
+  ```sh
+  $  python -m cortex.saver save                     \
+      -d/--database 'postgresql://127.0.0.1:5432' \
+     'pose'                                       \
+     'pose.result' 
+  ``` 
+ 
+* Saver
 
-```sh
-$ python -m serverclient --version
-foobar, version 0.1.0
-```
+    ```python
+  from cortex.api import run_api_server
+  
+  run_api_server(
+      host='127.0.0.1', 
+      port=5000, 
+      database_url='mongodb://127.0.0.1/27017')
+    ```
+  
+  or
+  
+  ```sh
+  $  python -m cortex.api run-server \
+      -h/--host '127.0.0.1'       \
+      -p/--port 5000              \
+      -d/--database 'mongodb://127.0.0.1/27017'
+  ``` 
+  
+* Cli
+  
+  ```sh
+    $ python -m cortex.cli get-users
+    …
+    $ python -m cortex.cli get-user 1
+    …
+    $ python -m cortex.cli get-snapshots 1
+    …
+    $ python -m cortex.cli get-snapshot 1 2
+    …
+    $ python -m cortex.cli get-result 1 2 'pose'
+    …
 
-All commands accept the `-q` or `--quiet` flag to suppress output, and the `-t`
-or `--traceback` flag to show the full traceback when an exception is raised
-(by default, only the error message is printed, and the program exits with a
-non-zero code).
-
-The CLI provides the `server` command, with the `run` subcommand:
-
-```sh
-$ python -m serverclient server run 127.0.0.1:5000 /tmp/data
-```
-
-The CLI further provides the `webserver` command, with the `run` subcommand:
-
-```sh
-$ python -m serverclient webserver run localhost:5000 /tmp/data
-```
-
-The CLI further provides the `thought` command, with the `upload` subcommand:
-
-```sh
-$ python -m serverclient thought upload 127.0.0.1:5000 1 "I'm hungry"
-```
-
-
-Do note that each command's options should be passed to *that* command, so for
-example the `-q` and `-t` options should be passed to `server`, not `run`.
-
-```sh
-$ python -m serverclient server run -q  127.0.0.1:5000 /tmp/data # this
- doesn't work
-ERROR: no such option: -q
-$ python -m serverclient -q server run 127.0.0.1:5000 /tmp/data # this does work
-```
+  ``` 
+  
+* Gui - React reflecting Api
+   
+    ```python
+  from cortex.gui import run_server
+  
+  run_server(
+      host='127.0.0.1', 
+      port=8080, 
+      api_host='127.0.0.1',
+      api_port=5000
+  )
+    ```
+  
+  or
+  
+  ```sh
+  $ python -m cortex.gui run-server \
+      -h/--host '127.0.0.1'       \
+      -p/--port 8080              \
+      -H/--api-host '127.0.0.1'   \
+      -P/--api-port 5000
+  ``` 
+  

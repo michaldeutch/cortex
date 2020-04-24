@@ -4,6 +4,8 @@ RUN mkdir /usr/src/cortex/server
 
 COPY ./*.py /usr/src/cortex/server/
 
+EXPOSE 8000
+
 CMD cd /usr/src/ && python -m cortex.server run-server \
       -h '0.0.0.0'          \
       -p 8000                 \
