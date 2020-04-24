@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RABBIT='rabbitmq://127.0.0.1:5672'
-MONGO='mongodb://mongodb:27017/'
+MONGO='mongodb://127.0.0.1:27017/'
 
 run() {
   echo "======== Running rabbitmq ========"
@@ -28,14 +28,15 @@ run() {
   gui=$!
 
   echo "Ran all cortex, hit ctrl+c to kill them all"
-  echo "Wait a few more seconds for my GUI to open in your browser!"
+  echo "Wait a few more seconds for my GUI to open in your browser! it will take some time to load"
   wait
 }
 
 finish() {
   echo ""
-  echo "killing :("
+  echo "killing... wait patiently"
   kill $server $pose $feelings $color $depth $saver $api $gui
+  docker container stop $(docker container ls -aq)
 }
 
 trap 'finish' SIGINT

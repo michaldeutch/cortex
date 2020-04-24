@@ -24,7 +24,7 @@
 3. To check that everything is working as expected, run the tests:
 
     ```sh
-    $ pytest tests/
+    [cortex] $ pytest tests/
     ...
     ```
 
@@ -33,13 +33,13 @@
 1. Run everything:
 
     ```sh
-    $ ./run_pipeline.sh
+    [cortex] $ ./run_pipeline.sh
     ```
    
 2. Send you own .mind file (can be .mind.gz):
 
     ```sh
-    $ python -m cortex.client upload-sample <mind_file>
+    [cortex] $ python -m cortex.client upload-sample <mind_file>
     ```
   
 3. Wait for it to finish and check out your browser at 'http://localhost:8080/'
@@ -81,7 +81,7 @@
   or
   
   ```sh
-  $ python -m cortex.client upload-sample \
+  [cortex] $ python -m cortex.client upload-sample \
       -h/--host '127.0.0.1'             \
       -p/--port 8000                    \
       'snapshot.mind.gz'
@@ -101,7 +101,7 @@
   or
   
   ```sh
-  $ python -m cortex.server run-server \
+  [cortex] $ python -m cortex.server run-server \
       -h/--host '127.0.0.1'          \
       -p/--port 8000                 \
       'rabbitmq://127.0.0.1:5672/'
@@ -118,11 +118,11 @@
   or
   
   ```sh
-  $  python -m cortex.parsers parse 'pose' 'snapshot.raw' > 'pose.result'
+  [cortex] $  python -m cortex.parsers parse 'pose' 'snapshot.raw' > 'pose.result'
   ```
   
   ```sh
-  $   python -m cortex.parsers run-parser 'pose' 'rabbitmq://127.0.0.1:5672/'
+  [cortex] $   python -m cortex.parsers run-parser 'pose' 'rabbitmq://127.0.0.1:5672/'
   ```
   
 * Saver
@@ -142,7 +142,7 @@
   or
   
   ```sh
-  $  python -m cortex.saver save                     \
+  [cortex] $  python -m cortex.saver save                     \
       -d/--database 'postgresql://127.0.0.1:5432' \
      'pose'                                       \
      'pose.result' 
@@ -162,7 +162,7 @@
   or
   
   ```sh
-  $  python -m cortex.api run-server \
+  [cortex] $  python -m cortex.api run-server \
       -h/--host '127.0.0.1'       \
       -p/--port 5000              \
       -d/--database 'mongodb://127.0.0.1/27017'
@@ -200,7 +200,7 @@
   or
   
   ```sh
-  $ python -m cortex.gui run-server \
+  [cortex] $ python -m cortex.gui run-server \
       -h/--host '127.0.0.1'       \
       -p/--port 8080              \
       -H/--api-host '127.0.0.1'   \
