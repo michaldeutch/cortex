@@ -42,15 +42,28 @@ function Overview({ smallStats }) {
       .then(res => res.json()).then(data => {
       let sortedSnapshots = data.sort((s1, s2) => s1["datetime"] <= s2["datetime"]);
       setSnapshots(sortedSnapshots);
-      setAllSnapshots(sortedSnapshots.map((snapshot, ind) => {
-        return (
-          <Snapshot
+      let allSnaps = [];
+      let lastSnap;
+      sortedSnapshots.forEach((snapshot, ind) => {
+        if (ind % 2 === 0) {
+          lastSnap = <Snapshot
             key = {ind}
             snapshot={snapshot}
             ind = {ind}
-          />
-        );
-      }))
+          />;
+        }
+        else{
+          allSnaps.push(<Row key={ind}>
+            {lastSnap}
+            <Snapshot
+              key = {ind}
+              snapshot={snapshot}
+              ind = {ind}
+            />
+          </Row>)
+        }
+      });
+      setAllSnapshots(allSnaps);
   });
   }, []);
 
@@ -100,10 +113,7 @@ function Overview({ smallStats }) {
           />
         </Col>
     </Row>
-
     {allSnapshots}
-
-
   </Container>
 );
 }

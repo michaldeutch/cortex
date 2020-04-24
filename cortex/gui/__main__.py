@@ -2,6 +2,7 @@ import sys
 import logging
 import click
 
+from cortex.gui import run_server
 
 logger = logging.getLogger(__name__)
 
@@ -15,8 +16,8 @@ logger = logging.getLogger(__name__)
               default='127.0.0.1')
 @click.option('-P', '--api-port', type=int, help='Define the APIs port',
               default=5000)
-def run_server(host, port, api_host, api_port):
-    pass
+def main(host, port, api_host, api_port):
+    run_server(host, port, api_host, api_port)
 
 
 if __name__ == '__main__':
