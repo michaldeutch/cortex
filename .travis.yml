@@ -7,6 +7,6 @@ install:
   - pip install pytest-cov
   - pip install -r requirements.txt
 script:
-  - pytest --cov-report term
+  - pytest --cov-report term --cov=cortex
 after_success:
   - codecov -t 2fa7c09a-2592-464f-99b7-0ddd75d6534d
