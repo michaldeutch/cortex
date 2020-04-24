@@ -51,23 +51,21 @@
 2. Declare in `<parser>.py` one of the two:
     
     * Class in the format:
-    
-        ```python
-    class MyParser:
-        field = 'parser_name'
-        def parse(self, data):
-            pass
-        ```
+    ```python
+   class MyParser:
+       field = 'parser_name'
+       def parse(self, data):
+           ...
+    ```
       
     * Method in the format:
     
-        ```python
-    def parse_parser(data):
-      pass
-  
-    parse_parser.field = 'parser_name'
-        ```
-
+    ```python
+   def parse_parser(data):
+       ...
+   
+   parse_parser.field = 'parser_name'
+    ```
 
 ## Usage
 
