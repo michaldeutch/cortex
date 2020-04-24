@@ -42,7 +42,7 @@
     [cortex] $ python -m cortex.client upload-sample <mind_file>
     ```
   
-3. Wait for it to finish and check out your browser at 'http://localhost:8080/'
+3. Wait for it to finish and check out your browser at 'http://localhost:8080/'. keep refreshing!
 
 ## HowTo add Parser?
 
