@@ -17,7 +17,7 @@ more-itertools==8.2.0
 numpy==1.18.2
 packaging==20.3
 pika==1.1.0
-Pillow==7.1.1
+Pillow==9.3.0
 pluggy==0.13.1
 protobuf==3.11.3
 py==1.8.1
